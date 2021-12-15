@@ -1,0 +1,26 @@
+var class_file_manager =
+[
+    [ "~FileManager", "d0/d48/class_file_manager.html#abaed33b5b0c13b8a597db9335a1aacfa", null ],
+    [ "checkHeader", "d0/d48/class_file_manager.html#a6928520e112536d9e4cf6037b8637cd6", null ],
+    [ "convertRawData", "d0/d48/class_file_manager.html#a1b6be0147413f473d72f4735ce1eabb7", null ],
+    [ "convertTo16B", "d0/d48/class_file_manager.html#a829a8896de48283bb92b571ee62d0466", null ],
+    [ "convertTo8B", "d0/d48/class_file_manager.html#a7f51a40b6e29c7868730eb2e5c51e568", null ],
+    [ "convertToFloat", "d0/d48/class_file_manager.html#a7afb941a0ce8029e0f58bf69e2bd1f87", null ],
+    [ "convertToFloat", "d0/d48/class_file_manager.html#a7cef33421b14c3db0896988ef6432bd4", null ],
+    [ "getAudioFormat", "d0/d48/class_file_manager.html#a540a289e589e36ebb71ad83ca59147b6", null ],
+    [ "getBitsPerSample", "d0/d48/class_file_manager.html#a0a13df56f343efa30a4c194341f13d85", null ],
+    [ "getBlockAlign", "d0/d48/class_file_manager.html#ace6c57c7daad28ebcb62d58d24027853", null ],
+    [ "getByteRate", "d0/d48/class_file_manager.html#a97e89ffcb374a76c1a0456e735d65b10", null ],
+    [ "getFileDuration", "d0/d48/class_file_manager.html#ab558acbc726913f8d399a8b0f37fee1c", null ],
+    [ "getFileName", "d0/d48/class_file_manager.html#ac032c323bb13a349701c759461b58c66", null ],
+    [ "getMonoStereo", "d0/d48/class_file_manager.html#a8aa7e98d843e2e8a7087cac0f77561cd", null ],
+    [ "getSampleRate", "d0/d48/class_file_manager.html#ab4e2e9b15107abb8b717884cd6a6357a", null ],
+    [ "getSamples", "d0/d48/class_file_manager.html#ae64301284620e8ec31f284ba47476fb9", null ],
+    [ "readData", "d0/d48/class_file_manager.html#a3fea673365107a447d868eed5275270a", null ],
+    [ "readHeader", "d0/d48/class_file_manager.html#a698c72c8a67115df897ce61671aede66", null ],
+    [ "writeFile", "d0/d48/class_file_manager.html#a97d18c755c4bcdedce6ac5860e80af4e", null ],
+    [ "data", "d0/d48/class_file_manager.html#a5d5735c748815cf5ac9e97cec3207111", null ],
+    [ "fileName", "d0/d48/class_file_manager.html#a6638ea8fdb3afa48c3068adf7e31057f", null ],
+    [ "header", "d0/d48/class_file_manager.html#ad2a8e9ff14e4d1a6b551b6cd54248dc2", null ],
+    [ "samples", "d0/d48/class_file_manager.html#a54d95f0bb4d55a198a53d42b15977995", null ]
+];

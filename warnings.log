@@ -1,0 +1,15 @@
+warning: source libmd5 is not a readable file or directory... skipping.
+warning: source liblodepng is not a readable file or directory... skipping.
+warning: source libmscgen is not a readable file or directory... skipping.
+error: Problems running dot: exit code=127, command='dot', arguments='"/home/admozqueda/SemesterProject/docs/html/db/dd4/_w_a_v___h_e_a_d_e_r_8h__dep__incl.dot" -Tsvg -o "/home/admozqueda/SemesterProject/docs/html/db/dd4/_w_a_v___h_e_a_d_e_r_8h__dep__incl.svg"'
+error: Problems running dot: exit code=127, command='dot', arguments='"/home/admozqueda/SemesterProject/docs/html/da/dce/main_8cpp__incl.dot" -Tsvg -o "/home/admozqueda/SemesterProject/docs/html/da/dce/main_8cpp__incl.svg"'
+error: Problems running dot: exit code=127, command='dot', arguments='"/home/admozqueda/SemesterProject/docs/html/d2/d39/_file_manager_8h__dep__incl.dot" -Tsvg -o "/home/admozqueda/SemesterProject/docs/html/d2/d39/_file_manager_8h__dep__incl.svg"'
+error: Problems running dot: exit code=127, command='dot', arguments='"/home/admozqueda/SemesterProject/docs/html/d5/d3d/_u_i_8cpp__incl.dot" -Tsvg -o "/home/admozqueda/SemesterProject/docs/html/d5/d3d/_u_i_8cpp__incl.svg"'
+error: Problems running dot: exit code=127, command='dot', arguments='"/home/admozqueda/SemesterProject/docs/html/dc/df8/test_8cpp__incl.dot" -Tsvg -o "/home/admozqueda/SemesterProject/docs/html/dc/df8/test_8cpp__incl.svg"'
+error: Problems running dot: exit code=127, command='dot', arguments='"/home/admozqueda/SemesterProject/docs/html/df/db3/_u_i_8h__incl.dot" -Tsvg -o "/home/admozqueda/SemesterProject/docs/html/df/db3/_u_i_8h__incl.svg"'
+error: Problems running dot: exit code=127, command='dot', arguments='"/home/admozqueda/SemesterProject/docs/html/graph_legend.dot" -Tsvg -o "/home/admozqueda/SemesterProject/docs/html/graph_legend.svg"'
+error: Problems running dot: exit code=127, command='dot', arguments='"/home/admozqueda/SemesterProject/docs/html/d6/df6/_file_manager_8cpp__incl.dot" -Tsvg -o "/home/admozqueda/SemesterProject/docs/html/d6/df6/_file_manager_8cpp__incl.svg"'
+error: Problems running dot: exit code=127, command='dot', arguments='"/home/admozqueda/SemesterProject/docs/html/db/dd6/class_file_manager__coll__graph.dot" -Tsvg -o "/home/admozqueda/SemesterProject/docs/html/db/dd6/class_file_manager__coll__graph.svg"'
+error: Problems running dot: exit code=127, command='dot', arguments='"/home/admozqueda/SemesterProject/docs/html/d2/dc0/_file_manager_8h__incl.dot" -Tsvg -o "/home/admozqueda/SemesterProject/docs/html/d2/dc0/_file_manager_8h__incl.svg"'
+error: Problems running dot: exit code=127, command='dot', arguments='"/home/admozqueda/SemesterProject/docs/html/d8/dd8/_u_i_8h__dep__incl.dot" -Tsvg -o "/home/admozqueda/SemesterProject/docs/html/d8/dd8/_u_i_8h__dep__incl.svg"'
+error: Failed to rename file /home/admozqueda/SemesterProject/docs/html/d6/df6/_file_manager_8cpp__incl.svg to /home/admozqueda/SemesterProject/docs/html/d6/df6/_file_manager_8cpp__incl.svg.tmp!

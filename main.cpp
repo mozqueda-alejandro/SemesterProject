@@ -1,9 +1,9 @@
 #include <iostream>
 #include <fstream>
 #include <string>
-#include "Wav.h"
 #include "UI.h"
 #include "FileManager.h"
+#include "WavException.h"
 
 
 /**
@@ -13,49 +13,42 @@
  */
 int main() {	
     bool executeProgram = true;
-    while (executeProgram) {
+    do {
         
-        UI newUI;
-        bool repeatMainMenu = true;
-        do { 
-            std::string userInput = newUI.startMenu();
-            switch (newUI.continueProgram(userInput)) {
-                case 0:
-                    //return 0;
-                    executeProgram = false;
-                    repeatMainMenu = false;
-                    break;
-                case 1:
-                    repeatMainMenu = false;
-                    break;
-                case 2:
-                    newUI.printError();
-                    break;
-                default:
-                    std::cout << "ERROR: Main menu switch\n\n";
-            }
-        } while (repeatMainMenu);
+        UI newUI;        
+        if (!newUI.continuePrompt()) {
+            executeProgram = false;
+        }
 
         FileManager newFile;
-
+        
         bool passProcessor = false;
         if (executeProgram) {
             int count = 0;
+            std::string fileInput = "";
             bool isWav;
             do {
-                std::string fileInput = newUI.enterFileName();
+                //Skips processor menu and repeats program if file is not WAV
+                //(SEM Project) Set to 1 to only prompt for file once
+                if (count >= 3) { 
+                    passProcessor = true;
+                    isWav = true; 
+                }
+                fileInput = newUI.enterFileName();
+                //Ignore: For testing purposes only
+                if (fileInput == "q.wav") {
+                    passProcessor = true;
+                    break;
+                }
                 try {
                     newFile.checkHeader(fileInput);
                     isWav = true;
-                } catch(const std::exception& e) {
-                    newUI.printError(e.what());
+                } catch(const std::runtime_error& e) {
+                    newUI.printError(e.what(), 1.5);
                     isWav = false;
                     count++;
                 }
-                if (count == 3) { 
-                    passProcessor = true;
-                    break; 
-                }
+                             
             } while(!isWav);
         }
         
@@ -85,7 +78,7 @@ int main() {
                     
                     
 
-                    newUI.delay(3);
+                    //newUI.delay(3);
                     break;
                 case 2: //ECHO
                     echoParamters = newUI.echoOptions(newFile);
@@ -96,13 +89,13 @@ int main() {
                     
                     
                     break;
-                default:
-                    newUI.printError();
-                    std::cout << "ERROR: Processor menu switch\n\n";
+                default: newUI.printError("PROGRAM ERROR: Processor menu switch");
             }
-            
-        }
-        if (!executeProgram) { newUI.exitScreen(); }            
-    }
+                        
+        } //Prints Metadata/processor
+        if (!executeProgram) { 
+            newUI.exitScreen();
+        }        
+    } while (executeProgram);
     return 0;
 }

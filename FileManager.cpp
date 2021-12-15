@@ -1,15 +1,12 @@
 #include <stdio.h>
 #include <string.h>
+#include <chrono>
+#include <thread>
 #include "FileManager.h"
 #include "WAV_HEADER.h"
-
-FileManager::~FileManager() {
-    delete[] data;
-}
-
-void FileManager::checkHeader(const std::string& inFile) {
     /*
-    std::cout << header.riff_header[4] << "\n";
+    std::cout << std::endl;
+    std::cout << header.riff_header << "\n";
     std::cout << header.wav_size << "\n";
     std::cout << header.wave_header << "\n";
     std::cout << header.fmt_header << "\n";
@@ -18,7 +15,22 @@ void FileManager::checkHeader(const std::string& inFile) {
     std::cout << header.num_channels << "\n";
     std::cout << header.sample_rate << "\n";
     std::cout << header.data_header << "\n";
+    std::cout << std::flush;
+    std::this_thread::sleep_until(std::chrono::system_clock::now() + std::chrono::seconds(4));
     */
+
+
+FileManager::FileManager() : data(nullptr) {}
+FileManager::~FileManager() {
+    delete[] data;
+}
+
+/**
+ * @brief Attempts to open file, read file header into WAV_HEADER struct, and then read data into char[]
+ * 
+ * @param inFile: Preformatted with either .wav or .wave file extension
+ */
+void FileManager::checkHeader(const std::string& inFile) {
     std::ifstream ifs;
     ifs.open(inFile, std::ios::binary | std::ios::in);
     if (ifs.is_open()) {
@@ -28,7 +40,7 @@ void FileManager::checkHeader(const std::string& inFile) {
             if(strncmp(header.wave_header, "WAVE", 4) == 0) {
                 if (strncmp(header.fmt_header, "fmt ", 4) == 0) {
                     readData(ifs);
-                    convertRawData();
+                    //convertRawData();
                 } else {
                     throw std::runtime_error("File does not have proper format.");
                 }
@@ -38,20 +50,37 @@ void FileManager::checkHeader(const std::string& inFile) {
         } else {
             throw std::runtime_error("File is not a RIFF file.");
         }
+        ifs.close();
     } else {
-        throw std::runtime_error("File could not be opened.");
+        throw std::runtime_error(inFile + " could not be opened.");
     }
 }
 
+/**
+ * @brief 
+ * 
+ * @param ifs 
+ */
 void FileManager::readHeader(std::ifstream& ifs) {
-    ifs.read((char*) &header, sizeof(header));
-    // ifs.read((char*) &header.riff_header, sizeof(header.riff_header));
-    // ifs.read((char*) &header.wav_size, sizeof(header.wav_size));
-    // ifs.read((char*) &header.wave_header, sizeof(header.wave_header));
-    // ifs.read((char*) &header.fmt_header, sizeof(header.fmt_header));
-    // ifs.read((char*) &header, sizeof(header) - 16);
-}
+    ifs.read((char*) &header.riff_header, sizeof(header.riff_header));
+    //ifs.get();
+    ifs.read((char*) &header.wav_size, sizeof(header.wav_size));
+    ifs.read((char*) &header.wave_header, sizeof(header.wave_header));
+    //
+    ifs.read((char*) &header.fmt_header, sizeof(header.fmt_header));
+    ifs.read((char*) &header.fmt_chunk_size, sizeof(header.fmt_chunk_size));
+    ifs.read((char*) &header.audio_format, sizeof(header.audio_format));
+    ifs.read((char*) &header.num_channels, sizeof(header.num_channels));
+    ifs.read((char*) &header.sample_rate, sizeof(header.sample_rate));
+    ifs.read((char*) &header.byte_rate, sizeof(header.byte_rate));
+    ifs.read((char*) &header.sample_alignment, sizeof(header.sample_alignment));
+    ifs.read((char*) &header.bit_depth, sizeof(header.bit_depth));
+    //
+    ifs.read((char*) &header.data_header, sizeof(header.data_header));
+    ifs.read((char*) &header.data_bytes, sizeof(header.data_bytes));
 
+
+}
 void FileManager::readData(std::ifstream& ifs) {
     data = new char[header.data_bytes];
     ifs.read((char*)data, header.data_bytes);
@@ -59,13 +88,14 @@ void FileManager::readData(std::ifstream& ifs) {
 
 bool FileManager::writeFile(std::string newFileName) {
     std::ofstream file(newFileName, std::ios::binary);
-    bool fileWritten = true;
+    bool fileWritten = false;
     if (file.is_open()) {
         file.write((char*) &header, sizeof(header));
         if (header.bit_depth == 8) {
             for (size_t i = 0; i < header.data_bytes; i++) {
                 data[i] = convertTo8B(samples[i]);
             }
+            fileWritten = true;
         } else if (header.bit_depth == 16) {
             int num = 0;
             for(size_t i = 0; i < header.data_bytes; i += 2) {
@@ -76,13 +106,10 @@ bool FileManager::writeFile(std::string newFileName) {
                 data[i + 1] = msb;
                 num++;
             }
-        } else {
-            fileWritten = false;
+            fileWritten = true;
         }
         file.write(data, header.data_bytes);
         file.close();
-    } else {
-        fileWritten = false;
     }
     return fileWritten;
 }

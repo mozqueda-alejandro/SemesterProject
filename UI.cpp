@@ -3,24 +3,46 @@
 
 UI::UI() {
     clearConsole();
-    println("Welcome to the start menu");
+    displayHeader("WAV File Reader/Processor");
 }
 
-std::string UI::startMenu() {
-    println("Do you wish to continue (Y/n)");
-    std::string userInput;
-    std::cin >> userInput;
-    return userInput;
-}
-
-int UI::continueProgram(std::string userInput) {
-    if (userInput == "N" || userInput == "n") {
-        return 0;
-    } else if (userInput == "Y" || userInput == "y") {
-        return 1;
-    } else {
-        return 2;
+void UI::displayHeader(std::string menuHeader) {
+    int width = menuHeader.length() + 6;
+    std::ostringstream banner;
+    banner << "+";
+    for(int i = 0; i < width; ++i) {
+        banner << "-";
     }
+    banner << "+";
+    std::cout << banner.str() << "\n";
+    std::cout << "|   " + menuHeader + "   |\n";
+    std::cout << banner.str() << "\n\n";
+}
+
+bool UI::continuePrompt() {
+    std::string userInput = "";
+    bool continueProgram;
+    static bool first = true;
+    bool repeat = true;
+    do {
+        printDelay("Do you want to continue (Y/n)? ");
+        //IMPORTANT: FLUSHES INPUT STREAM
+        if (!first) {
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(),'\n');
+        }
+        getline(std::cin, userInput);
+        if (userInput == "N" || userInput == "n") {
+            continueProgram = false;
+            break;
+        } else if (userInput == "Y" || userInput == "y" || userInput.empty()) {
+            continueProgram = true;
+            break;
+        } else {
+            printError();
+        }
+    } while (repeat);
+    first = false;
+    return continueProgram;
 }
 
 std::string UI::enterFileName() {
@@ -36,16 +58,33 @@ std::string UI::enterFileName() {
     return fileInput;
 }
 
+void UI::smartChecker(std::string) {
+    
+}
+
+bool UI::promptFile() {
+    return true;
+}
+
+void UI::formatHeader(const FileManager& file) {
+    
+}
+
 void UI::printMetadata(const FileManager& file) {
     clearConsole();
+    formatHeader(file);
     println("METADATA");
-    std::cout << "File Name:       " << file.getFileName() << "\n";
-    std::cout << "Audio Format:    " << file.getAudioFormat() << "\n";
-    std::cout << "Mono/Stereo:     " << file.getMonoStereo() << "\n";
-    std::cout << "Sample Rate:     " << file.getSampleRate() << "\n";
-    std::cout << "Byte Rate:       " << file.getByteRate() << "\n";
-    std::cout << "Bitdepth:        " << file.getBitsPerSample() << "\n";
-    std::cout << "Block Align:     " << file.getBlockAlign() << "\n";
+    std::cout << "File Name:         " << file.getFileName() << "\n";
+    std::cout << "RIFF Header:       " << (file.getRiffHeader()).substr(0, 4) << "\n";
+    std::cout << "WAV Size:          " << file.getWavSize() << " bytes\n";
+    std::cout << "WAV Header:        " << (file.getWaveHeader()).substr(0, 4) << "\n";
+    std::cout << "Format Header:     " << file.getFmtHeader() << "\n";
+    std::cout << "Audio Format:      " << file.getAudioFormat() << "\n";
+    std::cout << "Mono/Stereo:       " << file.getMonoStereo() << "\n";
+    std::cout << "Sample Rate:       " << file.getSampleRate() << " Hz\n";
+    std::cout << "Byte Rate:         " << file.getByteRate() << " Bytes per second\n";
+    std::cout << "Bit Depth:         " << file.getBitsPerSample() << "-Bit\n";
+    std::cout << "Block Align:       " << file.getSampleAlignment() << "\n";
     delay(3);
 }
 
@@ -84,7 +123,7 @@ std::vector<int> UI::echoOptions(const FileManager& file) {
     options.push_back(timeDelay);
 
     clearConsole();
-    std::string promptDecay = "By what percentage do you want the echo to decrease by (0 - 100)?";
+    std::string promptDecay = "What loudness percentage of the original audio do you want the echo to be (0 - 100)?";
     isValid = false;
     int decay;
     do {
@@ -106,7 +145,7 @@ int UI::promptProcessor(const std::string& prompt, const std::string& shortPromp
     do {
         std::cout << shortPrompt;
         std::cin >> userInput;
-        if (!userInput.empty() && userInput.find_first_not_of("0123456789") == std::string::npos) {
+        if (!userInput.empty() && userInput.find_first_not_of("0123456789") == std::string::npos && userInput.length() < 6) {
             isValid = true;
         } else { 
             printError(); 
@@ -133,14 +172,25 @@ int UI::gainOption(const FileManager&) {
 
 void UI::exitScreen() {
     clearConsole();
-    println("Closing application");
-    delay(1);
-    clearConsole();
+    std::cout << "Closing application";
+    delay(0.45);
+    //Closing animation. Remove if desired
+    for (int i = 0; i < 3; i++) {
+        std::cout << " . ";
+        delay(0.2);
+    }
+    //clearConsole();
 }
 
 void UI::printError() {
     println("ERROR: Invalid input. Please try again.");
     delay(2);
+    clearConsole();
+}
+
+void UI::printError(const char* error, int time) {
+    std::cout << error << "\n";
+    delay(time);
     clearConsole();
 }
 void UI::printError(const std::string& error, int time) {
@@ -154,12 +204,20 @@ void UI::printError(const std::ostringstream& error, int time) {
     clearConsole();
 }
 
+void UI::printDelay(std::string line) {
+    for (int i = 0; i < line.length(); i++) {
+        std::cout << line[i];
+        delay(0.025);
+    }
+}
 void UI::println(const std::string& line) {
     std::cout << line << "\n";
 }
-void UI::delay(int time) {
-    std::this_thread::sleep_until(std::chrono::system_clock::now() + std::chrono::seconds(time));
+void UI::delay(double dseconds) {
+    std::cout << std::flush;
+    int iseconds = static_cast<int>(dseconds * 1000);
+    std::this_thread::sleep_until(std::chrono::system_clock::now() + std::chrono::milliseconds(iseconds));
 }
 void UI::clearConsole() {
-    std::system("clear");
+    std::system(CLEAR);
 }
